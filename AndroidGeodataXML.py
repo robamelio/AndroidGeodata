@@ -100,15 +100,6 @@ class AndroidGeodataXML(DataSourceIngestModule):
         # if not os.path.exists(DataExtraction.path_to_dict):
         #     raise IngestModuleException("")
 
-        self.log(Level.INFO, "FINO QUI TUTTO OKAY")
-
-            # loading the dicionaory
-            # try:
-            #    f = open(os.path.dirname(os.path.abspath(__file__)) + '/test.json')
-            #    dic = json.load(f)
-            # except IOError as e:
-            #    self.log(Level.INFO, "I/O error({0}): {1}".format(e.errno, e.strerror))
-            #    return IngestModule.ProcessResult.OK
 
 
     # Where the analysis is done.
@@ -145,18 +136,16 @@ class AndroidGeodataXML(DataSourceIngestModule):
             # TODO: check values
             path = el.find("path").text
 
-            if el.find("type") is None: type = ""
-            else: type = el.find("type").text
-
-            name = el.find("name")
-            if name is None:
-                name = "%.jpg"
-            else:
-                name = el.find("name").text.replace(" ","")
+            if el.tag == "pic":
+                files = fileManager.findFiles(dataSource, path)
+            elif el.tag == "db":
+                name = el.find("name")
+                if name:
+                    files = fileManager.findFiles(dataSource, name.text.replace(" ",""), path)
+                else:
+                    files = fileManager.findFiles(dataSource, path)
 
             self.log(Level.INFO, "file name: " + name)
-
-            files = fileManager.findFiles(dataSource, name , path)
 
             for file in files:
                 self.log(Level.INFO, "Processing file: " + file.getName())
@@ -165,7 +154,7 @@ class AndroidGeodataXML(DataSourceIngestModule):
                 data = []
 
                 # Handles the file
-                handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath() )
+                handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath())
 
                 if handler.store_file(Case.getCurrentCase().getTempDirectory()):
 
@@ -175,7 +164,6 @@ class AndroidGeodataXML(DataSourceIngestModule):
                         res = handler.processPic()
                         if res:
                             res["name"] = handler.getName()
-                            res["path"] = handler.getPath()
                             res["type"] = "pic"
                             data.append(res)
 
@@ -190,6 +178,8 @@ class AndroidGeodataXML(DataSourceIngestModule):
 
                             for table in tables:
 
+
+
                                 if not tables_tag:
                                     resultSet = handler.query(table)
                                     try:
@@ -199,7 +189,8 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                         resultSetMetaData = None
                                         numColumns = None
                                 else:
-                                    resultSet = handler.query(table.attrib["name"])
+                                    table = table.attrib["name"]
+                                    resultSet = handler.query(table)
 
                                 if (tables_tag and resultSet) or ( (not tables_tag) and (resultSet and resultSetMetaData and numColumns)):
                                     rows = []
@@ -226,7 +217,6 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                                         attributes["name"] = handler.getName()
                                                         attributes["type"] = "db"
                                                         attributes["table"] = table
-                                                        attributes["path"] = handler.getPath()
                                                         if temp[1] in ("latitude", "longitude", "datetime", "text"):
                                                             attributes["column_"+temp[1]] = nameColumn
 
@@ -236,7 +226,6 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                                                 x["name"] = handler.getName()
                                                                 x["table"] = table
                                                                 x["type"] = "db"
-                                                                x["path"] = handler.getPath()
                                                                 x["column"] = nameColumn
                                                             rows = rows + temp[1]
 

@@ -124,7 +124,7 @@ class AndroidGeodataCrawler(FileIngestModule):
 
         # Analysis only the files with 'db',
         if ext in ("", "db", "pic", "json"):
-        #if ext == "db":
+        #if file.getName() == "gphotos0.db":
             # Handles the file
             handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath() )
 
@@ -244,47 +244,11 @@ class AndroidGeodataCrawler(FileIngestModule):
                 handler.delete_file()
 
         if data:
-            #self.log(Level.INFO, "[File: "+handler.getName()+", "+str(data)+"]")
+            #self.log(Level.INFO, "************************************************************\n"+str(data)+"\n*********************************************\n")
             el = None
             el_rep = None
             for item in data:
-
                 if "latitude" and "longitude" in item:
-                    self.log(Level.INFO, "[File: "+handler.getName()+", "+str(data)+"]")
-
-                    # if self.lastFile == item["name"]:
-                    #     # Element already exists
-                    #     if not any(table.get("name") == item["table"] for table in self.el.find("tables").iter("table") ):
-                    #         #No table
-                    #         table = et.SubElement(self.el.find("tables"), "table", name=item["name"])
-                    #         if "column" in item:
-                    #             et.SubElement(table,"column", type="").text = item["column"]
-                    #         else:
-                    #             et.SubElement(table,"column", type="latitude").text = item["column_latitude"]
-                    #             et.SubElement(table,"column", type="longitude").text = item["column_longitude"]
-                    #             if "column_datetime" in item:
-                    #                 et.SubElement(table,"column", type="datetime").text = item["column_datetime"]
-                    #
-                    # else:
-                    #     # No element
-                    #     el = et.SubElement(self.root, item["type"])
-                    #     et.SubElement(el, "app").text = item["path"] #.split("\/")[-2]
-                    #     et.SubElement(el, "path").text = item["path"]
-                    #     et.SubElement(el, "name").text = item["name"]
-                    #     if "table" in item:
-                    #         tables = et.SubElement(el, "tables")
-                    #         table = et.SubElement(tables, "table", name=item["table"])
-                    #         if "column" in item:
-                    #             et.SubElement(table,"column", type="").text = item["column"]
-                    #         else:
-                    #             et.SubElement(table,"column", type="latitude").text = item["column_latitude"]
-                    #             et.SubElement(table,"column", type="longitude").text = item["column_longitude"]
-                    #             if "column_datetime" in item:
-                    #                 et.SubElement(table,"column", type="datetime").text = item["column_datetime"]
-                    #
-                    #     self.el = el
-                    #
-                    # self.lastFile = item["name"]
 
                     if not el:
                         # No element
@@ -296,7 +260,7 @@ class AndroidGeodataCrawler(FileIngestModule):
                             tables = et.SubElement(el, "tables")
                             table = et.SubElement(tables, "table", name=item["table"])
                             if "column" in item:
-                                et.SubElement(table,"column", type="").text = item["column"]
+                                et.SubElement(table,"column", type="json").text = item["column"]
                             else:
                                 et.SubElement(table,"column", type="latitude").text = item["column_latitude"]
                                 et.SubElement(table,"column", type="longitude").text = item["column_longitude"]
@@ -306,9 +270,9 @@ class AndroidGeodataCrawler(FileIngestModule):
                         #Element already exists
                         if not any(table.get("name") == item["table"] for table in el.find("tables").iter("table") ):
                             #No table
-                            table = et.SubElement(el.find("tables"), "table", name=item["name"])
+                            table = et.SubElement(el.find("tables"), "table", name=item["table"])
                             if "column" in item:
-                                et.SubElement(table,"column", type="").text = item["column"]
+                                et.SubElement(table,"column", type="json").text = item["column"]
                             else:
                                 et.SubElement(table,"column", type="latitude").text = item["column_latitude"]
                                 et.SubElement(table,"column", type="longitude").text = item["column_longitude"]
@@ -359,10 +323,27 @@ class AndroidGeodataCrawler(FileIngestModule):
                     except Blackboard.BlackboardException as e:
                         self.log(Level.SEVERE, "Error indexing artifact " + art.getDisplayName())
 
-                    return IngestModule.ProcessResult.OK
-
 
                 if "text" in item:
+                    if not el:
+                        # No element
+                        el = et.SubElement(self.root, item["type"])
+                        et.SubElement(el, "app").text = item["path"] #.split("\/")[-2]
+                        et.SubElement(el, "path").text = item["path"]
+                        et.SubElement(el, "name").text = item["name"]
+                        if "table" in item:
+                            tables = et.SubElement(el, "tables")
+                            table = et.SubElement(tables, "table", name=item["table"])
+                            if "column_text" in item:
+                                et.SubElement(table,"column", type="text").text = item["column_text"]
+                    else:
+                        #Element already exists
+                        if not any(table.get("name") == item["table"] for table in el.find("tables").iter("table") ):
+                            #No table
+                            table = et.SubElement(el.find("tables"), "table", name=item["table"])
+                            if "column_text" in item:
+                                et.SubElement(table,"column", type="text").text = item["column_text"]
+
 
                     art_text = file.newArtifact(blackboard.getOrAddArtifactType("geodataTEXT","Geodata in text").getTypeID())
                     att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_TEXT.getTypeID(),
@@ -381,39 +362,6 @@ class AndroidGeodataCrawler(FileIngestModule):
 
 
                 if "column_other" in item:
-                    # if self.lastFile_rep == item["name"]:
-                    #     # Element already exists
-                    #     #if any(table.get("name") == item["name"] for table in self.el.iter("table") ):
-                    #     t = True
-                    #
-                    #     for table in self.el_rep.find("tables").iter("table"):
-                    #         if table.get("name") == item["table"]:
-                    #             #Table already exists
-                    #             t = False
-                    #             for column in item["column_other"]:
-                    #                 if not any(c.text == column for c in table.iter("column")):
-                    #                     et.SubElement(table, "column").text = column
-                    #             #break
-                    #     if t:
-                    #         #No table
-                    #         table = et.SubElement(self.el_rep.find("tables"), "table", name=item["table"])
-                    #         for column in item["column_other"]:
-                    #             et.SubElement(table,"column", type="").text = column
-                    #
-                    # else:
-                    #     # No element
-                    #     el_rep = et.SubElement(self.root_report, item["type"])
-                    #     et.SubElement(el_rep, "app").text = item["path"] #.split("\/")[-2]
-                    #     et.SubElement(el_rep, "path").text = item["path"]
-                    #     et.SubElement(el_rep, "name").text = item["name"]
-                    #     tables = et.SubElement(el_rep, "tables")
-                    #     table = et.SubElement(tables, "table", name=item["table"])
-                    #     for column in item["column_other"]:
-                    #         et.SubElement(table,"column", type="").text = column
-                    #
-                    #     self.el_rep = el_rep
-                    #
-                    # self.lastFile_rep = item["name"]
 
                     if not el_rep:
                         # No element
@@ -472,7 +420,8 @@ class AndroidGeodataCrawler(FileIngestModule):
         self.xmlname += "_"+str(self.picFound)+str(self.dbFound)+str(self.jsonFound)+str(self.filesFound)+"_androidgeodata.xml"
 
         report = open(self.xmlname, 'w')
-        #report.write(str(xml.dom.minidom.parseString(et.tostring(self.root)+"<!-- Reporto possible other coordinates --> "+et.tostring(self.root_report)).toprettyxml()))
+        report.write(
+            str(xml.dom.minidom.parseString(et.tostring(self.root)).toprettyxml())+" \n <!-- Report of possible other coordinates --> \n <!--"+(xml.dom.minidom.parseString(et.tostring(self.root_report)).toprettyxml()) +"-->" )
         report.close()
         Case.getCurrentCase().addReport(self.xmlname, AndroidGeodataCrawlerFactory.moduleName, "AndroidGeodata XML")
         message = IngestMessage.createMessage(IngestMessage.MessageType.DATA, AndroidGeodataCrawlerFactory.moduleName,
