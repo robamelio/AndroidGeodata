@@ -1,0 +1,277 @@
+<androidgeodata>
+    <!--<pic>
+        <app version="1.0">Camera</app>
+        <path>/media/0/DCIM/Camera/</path>
+        <name>IMG_20160627_132439.jpg</name>
+        <type>coordinates</type>
+    </pic>
+    <pic>
+      <app version="1.0">Facebook</app>
+      <path>/media/0/Pictures/Facebook/</path>
+      <type>coordinates</type>
+    </pic>
+   <pic>
+      <app version="1.0">Instagram</app>
+      <path>/media/0/Pictures/Instagram/</path>
+       <type>coordinates</type>
+    </pic>
+    <pic>
+      <app version="1.0">Twitter</app>
+      <path>/media/0/Pictures/Twitter/</path>
+        <type>coordinates</type>
+    </pic> -->
+    <db>
+        <app version="1.0">browser</app>
+        <path>/data/com.android.browser/app_geolocation</path>
+        <name>CachedGeoposition.db</name>
+        <tables>
+            <table name="CachedPosition">
+                <column>latitude</column>
+                <column>longitude</column>
+                <column>timestamp</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">whatsapp</app>
+        <path>/data/com.whatsapp/databases</path>
+        <name>msgstore.db</name>
+        <tables>
+            <table name="messages">
+                <column>latitude</column>
+                <column>longitude</column>
+                <column>timestamp</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">tripadvisor</app>
+        <path>/data/com.tripadvisor.tripadvisor/databases</path>
+        <name>TADatabase.db</name>
+        <tables>
+            <table name="TrackingEvent">
+                <column>body</column>
+            </table>
+            <table name="UserLocationtracking">
+                <column>latitude</column>
+                <column>longitude</column>
+                <column>timestamp</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">tripadvisor</app>
+        <path>/data/com.tripadvisor.tripadvisor/databases</path>
+        <name>timeline.db</name>
+        <tables>
+            <table name="Activity">
+                <column>latitude</column>
+                <column>longitude</column>
+                <column>endDate</column>
+            </table>
+            <table name="ActivityLog">
+                <column>latitude</column>
+                <column>longitude</column>
+                <column>recordedDate</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Google calendar</app>
+        <path>/data/com.google.android.calendar/databases</path>
+        <name>timelydata.db</name>
+        <tables>
+            <table name="timelydata">
+                <column>structuredLocation</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Google dialer</app>
+        <path>/data/com.google.android.dialer/databases</path>
+        <name>dialer.db</name>
+        <tables>
+            <table name="cached_number_contacts">
+                <column>lookup_key</column>
+                <column>me_last_update</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Gett</app>
+        <path>/data/com.gettaxi.android/databases</path>
+        <name>gettaxi_store.db</name>
+        <tables>
+            <table name="locationobject">
+                <column>latitude</column>
+                <column>longitude</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Facebook</app>
+        <path>/data/com.facebook.katana/databases</path>
+        <name>places.db</name>
+        <tables>
+            <table name="places_model">
+                <column>content</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Facebook</app>
+        <path>/data/com.facebook.katana/databases</path>
+        <name>events_db</name>
+        <tables>
+            <table name="events">
+                <column>location_longitude</column>
+                <column>location_latitude</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Google photos</app>
+        <path>/data/com.google.android.apps.photos/databases</path>
+        <name>gphotos0.db</name>
+        <tables>
+            <table name="shared_media">
+                <column>longitude</column>
+                <column>latitude</column>
+                <column>capture_timestamp</column>
+            </table>
+            <table name="remote_media">
+                <column>longitude</column>
+                <column>latitude</column>
+                <column>capture_timestamp</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Google photos</app>
+        <path>/data/com.google.android.apps.photos/databases</path>
+        <name>gphotos1.db</name>
+        <tables>
+            <table name="shared_media">
+                <column>longitude</column>
+                <column>latitude</column>
+                <column>capture_timestamp</column>
+            </table>
+            <table name="remote_media">
+                <column>longitude</column>
+                <column>latitude</column>
+                <column>capture_timestamp</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Android providers media</app>
+        <path>/data/com.google.android.providers.media/databases</path>
+        <name>external.db</name>
+        <tables>
+            <table name="contextual_tags">
+                <column>longitude</column>
+                <column>latitude</column>
+                <column>datetaken</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">twitter</app>
+        <path>/data/com.twitter.android/databases</path>
+        <name>%-46.db</name>
+        <tables>
+            <table name="search_queries">
+                <column>longitude</column>
+                <column>latitude</column>
+                <column>time</column>
+            </table>
+            <table name="statuses">
+                <column>longitude</column>
+                <column>latitude</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">whatsapp</app>
+        <path>/data/com.whatsapp/databases</path>
+        <name>web_sessions.db</name>
+        <tables>
+            <table name="sessions">
+                <column>lat</column>
+                <column>lon</column>
+                <column>last_active</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Facebook</app>
+        <path>/data/com.facebook.katana/databases</path>
+        <name>events_db</name>
+        <tables>
+            <table name="events">
+                <column>location_latitude</column>
+                <column>location_longitude</column>
+                <column>start_time_millis</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Endomondo</app>
+        <path>/data/com.endomondo.android/databases</path>
+        <name>trackpoint</name>
+        <tables>
+            <table name="sessions">
+                <column>latitude</column>
+                <column>longitude</column>
+                <column>timeStamp</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">Foursquared</app>
+        <path>/data/com.joelapenna.foursquared/databases</path>
+        <name>fsq.db</name>
+        <tables>
+            <table name="venues">
+                <column>loc_lat</column>
+                <column>loc_long</column>
+            </table>
+        </tables>
+    </db>
+    <db>
+        <app version="">WeatherClock</app>
+        <path>/data/com.sec.android.widgetapp.ap.hero.accuweather/databases</path>
+        <name>WeatherClock</name>
+        <tables>
+            <table name="MY_WEATHER_LIST">
+                <column>longitude</column>
+                <column>latitude</column>
+            </table>
+        </tables>
+    </db>
+
+
+   <!-- <db>
+      <app version="1.0">chrome</app>
+      <path>/data/com.android.chrome/app_chrome/Default/</path>
+      <name>History</name>
+      <tables>
+        <table name="urls">
+          <column>url</column>
+        </table>
+      </tables>
+    </db>-->
+
+
+    <db>
+      <app version="1.0">Facebook</app>
+      <path>/data/com.facebook.katana/databases/</path>
+      <name>places.db</name>
+    </db>
+    <!--<app>
+        <name>Facebook</name>
+        <version>1.0</version>
+        <module>facebook.py</module>
+    </app> -->
+
+</androidgeodata>

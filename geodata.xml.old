@@ -1,0 +1,31 @@
+<androidgeodata>
+  <app>
+    <name version="1.0" >browser</name>
+    <directory>/data/com.android.browser</directory>
+    <elements>
+      <db>
+        <path>/app_geolocation</path>
+        <name>CachedGeoposition.db</name>
+        <tables>
+          <table name="CachedPosition">
+            <column type="TSK_GEO_LATITUDE">latitude</column>
+            <column type="TSK_GEO_LONGITUDE">longitude</column>
+            <column type="TSK_VALUE">timestamp</column>
+          </table>
+        </tables>
+      </db>
+    </elements>
+  </app>
+  <app>
+    <name version="1.0" >Instagram</name>
+    <directory>/media/0/Pictures/Instagram</directory>
+    <elements>
+      <pic>
+        <name>IMG_20160627_132628.jpg</name>
+        <from>metadata</from>
+        <path>/</path>
+        <type>jpeg</type>
+      </pic>
+    </elements>
+  </app>
+</androidgeodata>
