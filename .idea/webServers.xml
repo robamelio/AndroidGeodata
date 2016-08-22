@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="68b48b4e-265a-42d2-b8d5-a7d61d676ac0" name="AndroidGeodata" url="http://localhost">
+        <fileTransfer port="0" mountedRoot="C:\Users\ameli\AppData\Roaming\autopsy\python_modules\AndroidGeodata" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
