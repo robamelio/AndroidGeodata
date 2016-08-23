@@ -166,7 +166,7 @@
     </db>
     <db>
         <app>Chrome</app>
-        <path>/img_nexus5_last_image.dd/vol_vol31/data/com.android.chrome/app_chrome/Default/</path>
+        <path>/data/com.android.chrome/app_chrome/Default/</path>
         <name>Web Data</name>
         <tables>
             <table name="autofill_profiles">
@@ -176,7 +176,7 @@
     </db>
     <db>
         <app>Chrome</app>
-        <path>/img_nexus5_last_image.dd/vol_vol31/data/com.android.chrome/app_chrome/Default/</path>
+        <path>/data/com.android.chrome/app_chrome/Default/</path>
         <name>History</name>
         <tables>
             <table name="urls">
@@ -186,11 +186,9 @@
     </db>
     <db>
         <app>Twitter</app>
-        <path>/img_nexus5_last_image.dd/vol_vol31/data/com.twitter.android/databases/</path>
-        <name>
-            <!-- 270447353-46.db -->
-            -46.db
-        </name>
+        <path>/data/com.twitter.android/databases/</path>
+        <!-- 270447353-46.db -->
+        <name>-46.db</name>
         <tables>
             <table name="users">
                 <column type="text">url_entities</column>
@@ -254,7 +252,7 @@
     </db>
     <db>
         <app version="">Android providers media</app>
-        <path>/data/com.google.android.providers.media/databases</path>
+        <path>/data/com.android.providers.media/databases</path>
         <name>external.db</name>
         <tables>
             <table name="files">
@@ -300,6 +298,7 @@
             <table name="venues">
                 <column type="latitude">loc_lat</column>
                 <column type="longitude">loc_long</column>
+                <column type="linked_datetime" table="recently_viewed_venue">last_viewed</column>
             </table>
         </tables>
     </db>
@@ -361,7 +360,7 @@
     </db>
     <db>
         <app>Chrome</app>
-        <path>/img_nexus5_last_image.dd/vol_vol31/data/com.android.chrome/app_chrome/Default</path>
+        <path>/data/com.android.chrome/app_chrome/Default</path>
         <name>Favicons</name>
         <tables>
             <table name="icon_mapping">

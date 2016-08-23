@@ -127,25 +127,27 @@ class AndroidGeodataXML(DataSourceIngestModule):
 
         # TODO: remove blank spaces
         for el in tree:
-
+            self.log(Level.INFO, "Element tag '" + el.tag+"'")
             # TODO: think where place this one
             # Check if the user pressed cancel while we were busy
             if self.context.isJobCancelled():
                 return IngestModule.ProcessResult.OK
 
             # TODO: check values
-            path = el.find("path").text
+            path = el.find("path").text.replace(" ","")
 
             if el.tag == "pic":
-                files = fileManager.findFiles(dataSource, path)
-            elif el.tag == "db":
+                files = fileManager.findFiles(dataSource, "%", path)
+            if el.tag == "db":
                 name = el.find("name")
-                if name:
-                    files = fileManager.findFiles(dataSource, name.text.replace(" ",""), path)
+                if name is None:
+                    files = fileManager.findFiles(dataSource, "%", path)
                 else:
-                    files = fileManager.findFiles(dataSource, path)
+                    #files = fileManager.findFiles(dataSource, name.text.replace(" ",""), path)
+                    files = fileManager.findFiles(dataSource, name.text, path)
 
-            self.log(Level.INFO, "file name: " + name)
+
+                #self.log(Level.INFO, "Element name " + name.text)
 
             for file in files:
                 self.log(Level.INFO, "Processing file: " + file.getName())
@@ -182,6 +184,7 @@ class AndroidGeodataXML(DataSourceIngestModule):
 
                                 if not tables_tag:
                                     resultSet = handler.query(table)
+                                    tablename = table
                                     try:
                                         resultSetMetaData = resultSet.getMetaData()
                                         numColumns = resultSetMetaData.getColumnCount()
@@ -189,15 +192,18 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                         resultSetMetaData = None
                                         numColumns = None
                                 else:
-                                    table = table.attrib["name"]
-                                    resultSet = handler.query(table)
+                                    tablename = table.attrib["name"]
+                                    resultSet = handler.query(table.attrib["name"])
+                                    resultSetMetaData = None
+                                    numColumns = None
 
-                                if (tables_tag and resultSet) or ( (not tables_tag) and (resultSet and resultSetMetaData and numColumns)):
+                                if (tables_tag and resultSet) or ( not tables_tag and (resultSet and resultSetMetaData and numColumns)):
                                     rows = []
                                     while resultSet.next():
                                         attributes = {}
 
                                         columns = range(1, numColumns + 1 ) if not tables_tag else table.findall("column")
+
 
                                         for column in columns:
 
@@ -207,7 +213,17 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                                 except:
                                                     nameColumn = None
                                             else:
-                                                nameColumn = column = column.text
+
+                                                if column.get("type") == "linked_datetime":
+                                                    # TODO: put controls
+                                                    res=handler.query(column.get("table"))
+                                                    while res.next():
+                                                        value = res.getString(column.text)
+                                                        attributes["datetime"] = long(value)
+                                                        attributes["column_datetime"] = column.text
+                                                    nameColumn = None
+                                                else:
+                                                    nameColumn = column = column.text
 
                                             if nameColumn:
                                                 temp = handler.processDB(resultSet, column, nameColumn, self.dict)
@@ -216,7 +232,8 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                                         attributes[temp[1]] = temp[2]
                                                         attributes["name"] = handler.getName()
                                                         attributes["type"] = "db"
-                                                        attributes["table"] = table
+                                                        attributes["table"] = tablename
+                                                        attributes["path"] = handler.getPath()
                                                         if temp[1] in ("latitude", "longitude", "datetime", "text"):
                                                             attributes["column_"+temp[1]] = nameColumn
 
@@ -224,8 +241,9 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                                         if temp[1]:
                                                             for x in temp[1]:
                                                                 x["name"] = handler.getName()
-                                                                x["table"] = table
+                                                                x["table"] = tablename
                                                                 x["type"] = "db"
+                                                                x["path"] = handler.getPath()
                                                                 x["column"] = nameColumn
                                                             rows = rows + temp[1]
 
@@ -284,7 +302,6 @@ class AndroidGeodataXML(DataSourceIngestModule):
                             except Blackboard.BlackboardException as e:
                                 self.log(Level.SEVERE, "Error indexing artifact " + art.getDisplayName())
 
-                            return IngestModule.ProcessResult.OK
 
 
                         elif "text" in item:
