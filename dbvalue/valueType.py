@@ -3,6 +3,8 @@ from dbvalue.util import util
 import re
 import urllib2
 
+from stanfordnlp.stanfordAPI import StanfordAPI
+
 class valueType():
 
     @staticmethod
@@ -56,11 +58,13 @@ class valueType():
             None: the value is not related
             Value: the value is probably a location
         """
-        res = util.findValue(nameColumn, dictionary, "dict_str")
-        if res:
-            return "single","text", value  #{"value": value, "key": "text"}
+        # res = util.findValue(nameColumn, dictionary, "dict_str")
+        # if res:
+        #     return "single","text", value  #{"value": value, "key": "text"}
 
         #stanford npl library
+        if StanfordAPI.getLocations(value):
+            return "single","text", value
 
         return None
 
@@ -122,4 +126,6 @@ class valueType():
 
     @staticmethod
     def text(value):
+        if StanfordAPI.getLocations(value):
+            return "single","text", value
         return None

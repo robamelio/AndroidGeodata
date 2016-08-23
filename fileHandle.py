@@ -210,6 +210,7 @@ class FileHandler:
         try:
             value = resultSet.getString(column)
             value = value.encode('ascii', 'ignore')
+            value = unicode(value, errors='ignore')
         except:
             return None
         else:
