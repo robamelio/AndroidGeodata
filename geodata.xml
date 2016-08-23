@@ -378,6 +378,9 @@
             </table>
         </tables>
     </db>
+    <app>
+        <name>googlemaps</name>
+    </app>
 
 
 </androidgeodata>

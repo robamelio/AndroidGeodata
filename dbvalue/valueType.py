@@ -63,8 +63,8 @@ class valueType():
         #     return "single","text", value  #{"value": value, "key": "text"}
 
         #stanford npl library
-        if StanfordAPI.getLocations(value):
-            return "single","text", value
+        # if StanfordAPI.getLocations(value):
+        #     return "single","text", value
 
         return None
 
@@ -126,6 +126,6 @@ class valueType():
 
     @staticmethod
     def text(value):
-        if StanfordAPI.getLocations(value):
-            return "single","text", value
+        # if StanfordAPI.getLocations(value):
+        #     return "single","text", value
         return None
