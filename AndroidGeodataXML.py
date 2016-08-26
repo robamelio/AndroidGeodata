@@ -6,7 +6,7 @@ from dbvalue.timestamp import timestamp
 from dbvalue.util import util
 import json
 from org.sleuthkit.datamodel import TskCoreException
-from googlemaps import appmod
+from appfun import appfun
 from java.util.logging import Level
 from org.sleuthkit.datamodel import BlackboardArtifact
 from org.sleuthkit.datamodel import BlackboardAttribute
@@ -139,6 +139,7 @@ class AndroidGeodataXML(DataSourceIngestModule):
 
             if el.tag == "pic":
                 path = el.find("path").text.replace(" ","")
+
                 files = fileManager.findFiles(dataSource, "%", path)
             if el.tag == "db":
                 path = el.find("path").text.replace(" ","")
@@ -150,25 +151,20 @@ class AndroidGeodataXML(DataSourceIngestModule):
                     files = fileManager.findFiles(dataSource, name.text, path)
 
             if el.tag == "app":
-                #
-                # try:
-                #     module = __import__(el.find("name").text)
-                # except ImportError as ie:
-                #     self.log(Level.INFO, "ImportError = " + str(ie))
-                # except:
-                #     self.log(Level.INFO, "Error to compile")
-                # else:
-                #     files = fileManager.findFiles(dataSource, module.appmod.name, module.appmod.path)
-                #     if files:
-                #         data = module.appmod.process(files)
-                # finally:
-                #     files = []
-                self.log(Level.INFO, "App googlemaps name =" + appmod.name+", path ="+appmod.path)
-                files = fileManager.findFiles(dataSource, appmod.name, appmod.path)
-                self.log(Level.INFO, "Files =" + files)
-                if files:
-                    data = appmod.process(files)
-                #self.log(Level.INFO, "Element name " + name.text)
+
+                try:
+                    f = getattr(appfun, el.find("name").text)
+                except:
+                    self.log(Level.INFO, "Error to load the function "+el.find("name").text)
+                else:
+                    #files = fileManager.findFiles(dataSource, el.find("filename").text, el.find("path").text)
+                    files = fileManager.findFiles(dataSource, el.find("filename").text, el.find("path").text)
+                    if files:
+                        data = f(files)
+                        #self.log(Level.INFO, "Ha trovato file e data = "+str(data))
+
+                finally:
+                    files = []
 
 
 
@@ -184,22 +180,25 @@ class AndroidGeodataXML(DataSourceIngestModule):
                 if handler.store_file(Case.getCurrentCase().getTempDirectory()):
 
                     if el.tag == "pic" and handler.isPic():
-                        self.log(Level.INFO, "Element pic")
+                        self.log(Level.INFO, "Element pic, guardo file")
 
                         res = handler.processPic()
                         if res:
                             res["name"] = handler.getName()
                             res["type"] = "pic"
-                            data.append(res)
+                            data.append({"file":file,"el":[res]})
+                            self.log(Level.INFO, "dati trovati el = "+str([res]))
 
                     if el.tag == "db":
-                        self.log(Level.INFO, "Element db")
+                        self.log(Level.INFO, "Element db, guardo file")
 
                         if handler.connect():
-
+                            self.log(Level.INFO, "Okay db")
                             tables_tag = el.find("tables")
 
                             tables = handler.getTables() if not tables_tag else tables_tag
+
+                            fileobj = { "file":file, "el":[]}
 
                             for table in tables:
 
@@ -273,76 +272,81 @@ class AndroidGeodataXML(DataSourceIngestModule):
 
                                         if attributes: rows.append(attributes)
 
-                                    if rows: data = data + rows
+                                    if rows: fileobj["el"] = fileobj["el"] + rows
+
+                            data.append(fileobj)
 
                             handler.close()
 
             if data:
                 self.log(Level.INFO, "Final data = "+str(data))
 
-                for item in data:
-                    if "latitude" and "longitude" in item:
-                        art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_GPS_TRACKPOINT)
+                for f in data:
+                    file = f["file"]
+                    for item in f["el"]:
+                        self.log(Level.INFO, "check el = "+str(item))
+                        if "latitude" and "longitude" in item:
+                            art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_GPS_TRACKPOINT)
 
-                        if "datetime" in item:
-                            if item["datetime"] != "":
-                                if isinstance(item["datetime"],str):
-                                    if el.tag == "pic":
-                                        att3 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DATETIME.getTypeID(),
-                                                                   AndroidGeodataXMLFactory.moduleName, timestamp.getTimestampFromPicDatetime(item["datetime"]) )
+                            if "datetime" in item:
+                                if item["datetime"] != "":
+                                    if isinstance(item["datetime"],str):
+                                        if el.tag == "pic":
+                                            att3 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DATETIME.getTypeID(),
+                                                                       AndroidGeodataXMLFactory.moduleName, timestamp.getTimestampFromPicDatetime(item["datetime"]) )
+                                        else:
+                                            att3 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DATETIME.getTypeID(),
+                                                                       AndroidGeodataXMLFactory.moduleName, timestamp.getTimestampFromString(item["datetime"]) )
                                     else:
                                         att3 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DATETIME.getTypeID(),
-                                                                   AndroidGeodataXMLFactory.moduleName, timestamp.getTimestampFromString(item["datetime"]) )
-                                else:
-                                    att3 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DATETIME.getTypeID(),
-                                                               AndroidGeodataXMLFactory.moduleName,  timestamp.epochTOtimestamp(item["datetime"]))
+                                                                   AndroidGeodataXMLFactory.moduleName,  timestamp.epochTOtimestamp(item["datetime"]))
 
-                                art.addAttribute(att3)
+                                    art.addAttribute(att3)
 
-                        att1 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_GEO_LATITUDE.getTypeID(),
-                                                   AndroidGeodataXMLFactory.moduleName, item["latitude"])
+                            att1 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_GEO_LATITUDE.getTypeID(),
+                                                       AndroidGeodataXMLFactory.moduleName, item["latitude"])
 
-                        att2 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_GEO_LONGITUDE.getTypeID(),
-                                                   AndroidGeodataXMLFactory.moduleName, item["longitude"])
+                            att2 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_GEO_LONGITUDE.getTypeID(),
+                                                       AndroidGeodataXMLFactory.moduleName, item["longitude"])
 
-                        att4 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_PROG_NAME.getTypeID(),
-                                                   AndroidGeodataXMLFactory.moduleName, item["name"])
+                            att4 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_PROG_NAME.getTypeID(),
+                                                       AndroidGeodataXMLFactory.moduleName, item["name"])
 
-                        art.addAttributes([att1, att2, att4])
+                            art.addAttributes([att1, att2, att4])
 
-                        if "column" in item:
-                            att5 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DESCRIPTION.getTypeID(),
-                                                       AndroidGeodataXMLFactory.moduleName, "table: "+item["table"]+", column = "+item["column"])
-                            art.addAttribute(att5)
-                        elif "table" in item:
-                            att5 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DESCRIPTION.getTypeID(),
-                                                       AndroidGeodataXMLFactory.moduleName, "table: "+item["table"]+", column = "+item["column_latitude"]+", "+item["column_longitude"])
-                            art.addAttribute(att5)
+                            if "column" in item:
+                                att5 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DESCRIPTION.getTypeID(),
+                                                           AndroidGeodataXMLFactory.moduleName, "table: "+item["table"]+", column = "+item["column"])
+                                art.addAttribute(att5)
+                            elif "table" in item:
+                                att5 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DESCRIPTION.getTypeID(),
+                                                           AndroidGeodataXMLFactory.moduleName, "table: "+item["table"]+", column = "+item["column_latitude"]+", "+item["column_longitude"])
+                                art.addAttribute(att5)
 
-                        try:
-                            # index the artifact for keyword search
-                            blackboard.indexArtifact(art)
-                        except Blackboard.BlackboardException as e:
-                            self.log(Level.SEVERE, "Error indexing artifact " + art.getDisplayName())
+                            try:
+                                # index the artifact for keyword search
+                                blackboard.indexArtifact(art)
+                            except Blackboard.BlackboardException as e:
+                                self.log(Level.SEVERE, "Error indexing artifact " + art.getDisplayName())
 
 
 
-                    elif "text" in item:
+                        elif "text" in item:
 
-                        art_text = file.newArtifact(blackboard.getOrAddArtifactType("geodataTEXT","Geodata in text").getTypeID())
-                        att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_TEXT.getTypeID(),
-                                                  AndroidGeodataXMLFactory.moduleName, item["text"] )
-                        if "column_text" and "table" in item:
-                            att1 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DESCRIPTION.getTypeID(),
-                                                       AndroidGeodataXMLFactory.moduleName, "table: "+item["table"]+", column = "+item["column_text"])
+                            art_text = file.newArtifact(blackboard.getOrAddArtifactType("geodataTEXT","Geodata in text").getTypeID())
+                            att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_TEXT.getTypeID(),
+                                                      AndroidGeodataXMLFactory.moduleName, item["text"] )
+                            if "column_text" and "table" in item:
+                                att1 = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_DESCRIPTION.getTypeID(),
+                                                           AndroidGeodataXMLFactory.moduleName, "table: "+item["table"]+", column = "+item["column_text"])
 
-                        art_text.addAttributes([att,att1])
+                            art_text.addAttributes([att,att1])
 
-                        try:
-                            # index the artifact for keyword search
-                            blackboard.indexArtifact(art_text)
-                        except Blackboard.BlackboardException as e:
-                            self.log(Level.SEVERE, "Error indexing artifact " + art_text.getDisplayName())
+                            try:
+                                # index the artifact for keyword search
+                                blackboard.indexArtifact(art_text)
+                            except Blackboard.BlackboardException as e:
+                                self.log(Level.SEVERE, "Error indexing artifact " + art_text.getDisplayName())
 
 
 
