@@ -19,15 +19,18 @@ class FileHandler:
         extension: it's the extension of the file.
     """
 
-    def __init__(self, file, extension, name, path):
+    def __init__(self, file, extension, name, path, id, stanpl=False):
         """Inits FileHandler."""
         self.file = file
         self.extension = extension
         self.path = path
         self.name = name
+        self.id = id
+        self.stanpl = stanpl
         self.lclPath = ""
         self.dbConn = None
         self.stmt = None
+        self.storedName = str(self.id)+"."+self.extension if self.extension else str(self.id)
 
     def getName(self):
         """Returns the name of the file"""
@@ -65,7 +68,7 @@ class FileHandler:
             false: errors in storing the file
         """
         try:
-            self.lclPath = os.path.join(directory, self.file.getName())
+            self.lclPath = os.path.join(directory, self.storedName)
             ContentUtils.writeToFile(self.file, File(self.lclPath))
         except:
             return False
@@ -83,10 +86,10 @@ class FileHandler:
         """
         try:
             os.remove(self.lclPath)
-        except:
-            return False
+        except OSError as e:
+            return str(e)
         else:
-            return True
+            return None
 
     def processPic(self):
         """ Looks for geodata in EXIF.
@@ -210,7 +213,7 @@ class FileHandler:
         try:
             value = resultSet.getString(column)
             value = value.encode('ascii', 'ignore')
-            value = unicode(value, errors='ignore')
+            value = value.encode('utf-8', 'ignore')
         except:
             return None
         else:
@@ -224,18 +227,19 @@ class FileHandler:
 
                 if util.isOneWord(value):
                     #Word
-                    return valueType.word(value,nameColumn, dictionary)
+                    return valueType.word(value,nameColumn, dictionary, self.stanpl)
 
                 #Json
                 if value.startswith("{"):
-                    return valueType.json(value,)
+                    return valueType.json(value)
 
                 #Http
                 if util.noBlankSpace(value):
-                    return valueType.url(value)
+                    return valueType.url(value, self.stanpl)
 
                 #Text
-                return valueType.text(value)
+                if self.stanpl:
+                    return valueType.text(value)
 
             return None
 

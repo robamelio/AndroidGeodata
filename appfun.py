@@ -16,7 +16,7 @@ class appfun:
 
 
 
-            handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath())
+            handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath(), file.getId())
 
             if handler.store_file(Case.getCurrentCase().getTempDirectory()):
 

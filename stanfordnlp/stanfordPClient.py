@@ -10,12 +10,13 @@ def parse_text(text):#, sentences="MULTIPLE", ignoreSetneceLen=False ) :
             try:
                 handler  = urllib2.Request( url=url, data=text);
                 handler = urllib2.urlopen(handler)
+                response = handler.read().decode( 'utf-8' )
+                response = json.loads( response.replace('\r\n', ''), strict=False )
+                return response
             except:
                 return None
 
-            response = handler.read().decode( 'utf-8' )
-            response = json.loads( response.replace('\r\n', ''), strict=False )
-            return response
+
     return None
 
     #if not ignoreSetneceLen :

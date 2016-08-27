@@ -47,7 +47,7 @@ class valueType():
 
 
     @staticmethod
-    def word(value, nameColumn, dictionary):
+    def word(value, nameColumn, dictionary, stanpl):
         """ Checks whether a word is likely to be a name related with location
 
         Args:
@@ -58,13 +58,16 @@ class valueType():
             None: the value is not related
             Value: the value is probably a location
         """
-        # res = util.findValue(nameColumn, dictionary, "dict_str")
-        # if res:
-        #     return "single","text", value  #{"value": value, "key": "text"}
+        if stanpl:
+            if StanfordAPI.getLocations(value):
+                return "single","text", value
+        else:
+            res = util.findValue(nameColumn, dictionary, "dict_str")
+            if res:
+                return "single","text", value  #{"value": value, "key": "text"}
 
-        #stanford npl library
-        # if StanfordAPI.getLocations(value):
-        #     return "single","text", value
+
+
 
         return None
 
@@ -116,16 +119,20 @@ class valueType():
         return None
 
     @staticmethod
-    def url(value):
+    def url(value, stanpl):
         res = re.findall(r"(?:https?:\/\/)?(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&//=]*)q=([-a-zA-Z0-9@:%_\+.~#?//=]*)",value)
 
         q = str(urllib2.unquote(res[0].split("&")[0].replace("+"," ")).decode('utf8')) if res else None
+
+        if stanpl:
+            if not StanfordAPI.getLocations(q):
+                q = None
 
         return ( "single", "text", q ) if q else None
 
 
     @staticmethod
     def text(value):
-        # if StanfordAPI.getLocations(value):
-        #     return "single","text", value
+        if StanfordAPI.getLocations(value):
+            return "single","text", value
         return None
