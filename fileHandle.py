@@ -1,26 +1,56 @@
+"""
+FileHandle is part of the AndroidGeodata project,
+see the project page for more information https://github.com/robiame/AndroidGeodata.
+
+FileHandle is a class that manages a file, basically is an abstraction of
+the Autopsy file given as input.
+
+
+Copyright (C) 2016  Roberto Amelio
+
+This file is part of AndroidGeodata.
+
+AndroidGeodata is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+AndroidGeodata is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with AndroidGeodata.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+import exif
+from dbvalue.util import util
+from dbvalue.valueType import valueType
+from stanfordnlp.stanfordAPI import StanfordAPI
+
 import os
+from pil import Image
 
 from java.io import File
 from java.lang import Class
 from java.sql import DriverManager
 from org.sleuthkit.autopsy.datamodel import ContentUtils
 
-import exif
-from dbvalue.util import util
-from dbvalue.valueType import valueType
-from pil import Image
-
-
 class FileHandler:
-    """ It handles a file: storing, deleting, processing of data and DB connection management.
+    """ It handles a file: storing, deleting, processing data and DB connection management.
 
     Attributes:
-        file: it's the file.
-        extension: it's the extension of the file.
+        file: datamodel.AbstractContent file.
+        extension: file's extension.
+        name: file's name.
+        path: file's path in the Android storage.
+        id: file's id from AbstractContent.
+        stanpl: flag for stanford npl library
     """
 
     def __init__(self, file, extension, name, path, id, stanpl=False):
-        """Inits FileHandler."""
+        """Inits FileHandler"""
         self.file = file
         self.extension = extension
         self.path = path
@@ -64,8 +94,8 @@ class FileHandler:
             directory: where to store the file.
 
         Returns:
-            True: file stored
-            false: errors in storing the file
+            True: file stored.
+            False: errors in storing the file.
         """
         try:
             self.lclPath = os.path.join(directory, self.storedName)
@@ -76,13 +106,13 @@ class FileHandler:
             return True
 
     def delete_file(self):
-        """ Deletes the file stored when it's been precessed.
+        """ Deletes a file stored.
 
         Args: -
 
         Returns:
-            True: file deleted.
-            False: errors in deleting the file.
+            None: file deleted.
+            String: the error if it fails.
         """
         try:
             os.remove(self.lclPath)
@@ -98,7 +128,7 @@ class FileHandler:
 
         Returns:
             None: when either the pic is not open or no geodata is found.
-            data: data with geodata represented as {"latitude": value, "longitude": value, "datetime": value}
+            data: data with geodata represented as {"latitude": value, "longitude": value, "datetime": value}.
         """
         try:
             image = Image.open(self.lclPath)
@@ -107,25 +137,31 @@ class FileHandler:
         else:
             exif_data = exif.get_exif_data(image)
             data = exif.get_lat_lon_datatime(exif_data)
-            if data:
-                if data["latitude"] != "" and data["longitude"] != "":
-                    return data
+            if data and (data["latitude"] != "" and data["longitude"] != ""):
+                return data
 
 
     def processFile(self):
-        """
+        """ Looks for words that may be related with locations using the stanford library
 
-        :return:
+        Args: -
+
+        Returns:
+            String: line of the file where there is a location.
+            None: no words found.
         """
         try:
             with open(self.lclPath) as f:
                 for line in f:
-                    # process(line)
-                    pass
-        except: return None
+                    if StanfordAPI.getLocations(line):
+                        return line
+        except:
+            pass
+
+        return None
 
     def connect(self):
-        """ Connects to the databased stored with the method 'stored_file'.
+        """ Connects to a databased if the file being processed is a db.
 
         Args: -
 
@@ -205,14 +241,14 @@ class FileHandler:
             nameColumn: name of the column.
 
         Returns:
-            None: no value found
-            list:
+            None: no value found.
+            Value: the value matches.
 
         """
 
         try:
             value = resultSet.getString(column)
-            value = value.encode('ascii', 'ignore')
+            #value = value.encode('ascii', 'ignore')
             value = value.encode('utf-8', 'ignore')
         except:
             return None

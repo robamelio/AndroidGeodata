@@ -1,11 +1,34 @@
+"""
+util is part of the AndroidGeodata project,
+see the project page for more information https://github.com/robiame/AndroidGeodata.
+
+util is a class that collects useful methods.
+
+
+Copyright (C) 2016  Roberto Amelio
+
+This file is part of AndroidGeodata.
+
+AndroidGeodata is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+AndroidGeodata is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with AndroidGeodata.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import json
 import re
 
-from stanfordnlp.stanfordAPI import StanfordAPI
 
-class util():
-    """It contains al the methods used to extract and elaborate the information"""
-
+class util:
+    """It contains useful methods"""
 
     @staticmethod
     def findValue(value, dict, typedict):
@@ -14,17 +37,13 @@ class util():
         Args:
             value: value to look for
             dict: the dictionary loaded previously
-            typedict: 'dict_num' and 'dict_str' are the two dictionaries available.
+            typedict: 'dict_num', 'dict_str', 'dict_datetime', 'dict_db' are the dictionaries available.
 
         Returns:
             None: no match in the dictionary
             Value: type of the value (latitude, logitude, datetime, text ..)
         """
 
-        # for x in dict[typedict]:
-        #     for z in dict[typedict][x]:
-        #         if value.lower() == z.lower():
-        #             return x
         for x in dict[typedict]:
             if any(z.lower() == value.lower() for z in dict[typedict][x]):
                 return x
@@ -40,18 +59,15 @@ class util():
             True: it is
             False: it is not
         """
-        #'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 
         list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '"', '%', '$', "'", '&', ')', '(', '+', '*', '-', ',', '/', '.', ';', ':', '=', '<', '?', '>',
                 '@', '[', ']', '\\', '_', '^', '`', '{', '}', '|', '~']
 
-        # list = ['!', '#', '"', '%', '$', "'", '&', ')', '(', '+', '*', '-', '/', ';', ':', '=', '<', '?', '>',
-        #         '@', '[', ']', '\\', '_', '^', '`', '{', '}', '|', '~']
         return False if any(char in list for char in value) else True
 
     @staticmethod
     def isNumber(value):
-        """Checks whether the value is only one word
+        """Checks whether the value is a number
 
         Args: -
 
@@ -59,12 +75,9 @@ class util():
             True: it is
             False: it is not
         """
-        #'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 
         list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '+', '-']
 
-        # list = ['!', '#', '"', '%', '$', "'", '&', ')', '(', '+', '*', '-', '/', ';', ':', '=', '<', '?', '>',
-        #         '@', '[', ']', '\\', '_', '^', '`', '{', '}', '|', '~']
         return True if all(char in list for char in value) else False
 
     @staticmethod
@@ -78,8 +91,6 @@ class util():
             False: blank spaces
         """
 
-        # By regular expression
-        # return True if len(re.findall("\S+", value)) == 1 else False
         return False if any(char == " " for char in value) else True
 
     @staticmethod
@@ -140,20 +151,6 @@ class util():
                 data = []
                 for x in range(0,len(data_lat)):
                     data.append({"latitude": data_lat[x], "longitude":data_lng[x], "datetime":""})
-                if data: return data
+                if data:
+                    return data
             return None
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

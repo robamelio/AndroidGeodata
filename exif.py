@@ -1,3 +1,32 @@
+"""
+This file was initially forked and modified from https://gist.github.com/erans/983821 .
+Credits https://github.com/erans
+
+
+exif is part of the AndroidGeodata project,
+see the project page for more information https://github.com/robiame/AndroidGeodata.
+
+exif extracts longitude, latitude and datetime from a pic.
+
+
+Copyright (C) 2016  Roberto Amelio
+
+This file is part of AndroidGeodata.
+
+AndroidGeodata is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+AndroidGeodata is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with AndroidGeodata.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 from pil.ExifTags import TAGS, GPSTAGS
 
 def get_exif_data(image):

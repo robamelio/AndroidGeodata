@@ -1,5 +1,5 @@
 <androidgeodata>
-    <!--<pic>
+    <pic>
          <app version="1.0">Camera</app>
          <path>/media/0/DCIM/Camera/</path>
      </pic>
@@ -376,7 +376,7 @@
                  <column type="text">server_non_unique_name</column>
              </table>
          </tables>
-     </db>-->
+     </db>
     <app>
         <name>googlemaps</name>
         <path>/data/com.google.android.apps.maps/cache/http</path>
