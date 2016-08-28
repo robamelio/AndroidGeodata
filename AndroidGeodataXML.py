@@ -305,11 +305,16 @@ class AndroidGeodataXML(DataSourceIngestModule):
                             art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_GPS_TRACKPOINT)
 
                             if "datetime" in item and item["datetime"] != "":
-                                att1 =  ( getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromPicDatetime(item["datetime"]) ) if el.tag == "pic" \
-                                            else getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromString(item["datetime"]) ) ) \
-                                    if isinstance(item["datetime"],str) \
-                                        else getBlackboardAtt("TSK_DATETIME",  timestamp.epochTOtimestamp(item["datetime"]))
-
+                                if isinstance(item["datetime"],str):
+                                    if el.tag == "pic":
+                                        att1 = getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromPicDatetime(item["datetime"]))
+                                    else:
+                                        att1 = getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromString(item["datetime"]))
+                                else:
+                                    if len(str(item["datetime"])) == 10:
+                                        att1 = getBlackboardAtt("TSK_DATETIME",  item["datetime"])
+                                    elif len(str(item["datetime"])) == 13:
+                                        att1 = getBlackboardAtt("TSK_DATETIME",  int(item["datetime"]/1000))
                                 art.addAttribute(att1)
 
                             att2 = getBlackboardAtt("TSK_GEO_LATITUDE", item["latitude"])
@@ -338,10 +343,10 @@ class AndroidGeodataXML(DataSourceIngestModule):
 
                             art_text = file.newArtifact(blackboard.getOrAddArtifactType("geodataTEXT","Geodata in text").getTypeID())
                             att = getBlackboardAtt("TSK_TEXT", item["text"] )
+                            art_text.addAttribute(att)
                             if "column_text" and "table" in item:
                                 att1 = getBlackboardAtt("TSK_DESCRIPTION", "table: "+item["table"]+", column = "+item["column_text"])
-
-                            art_text.addAttributes([att,att1])
+                                art_text.addAttribute(att1)
 
                             try:
                                 # index the artifact for keyword search

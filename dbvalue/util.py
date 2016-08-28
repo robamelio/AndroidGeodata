@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 along with AndroidGeodata.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
 import re
 
 
@@ -105,52 +104,3 @@ class util:
             False: the value doesn't have
         """
         return True if len(re.findall("[\.,](?=\d{5})", value)) == 1 else False
-
-
-    @staticmethod
-    def jsonFile(value):
-        """Checks whether value is a json file, if yes it looks for gps coordinates
-
-        Args:
-            value: the value that has to be checked.
-
-        Returns:
-            None: either the value is not a json or no values found.
-            list: a list that contains the data found using the following format
-                            {"latitude": value, "longitude":value, "datetime":value}
-
-        """
-
-        data_lat = []
-        data_lng = []
-
-        key = ["latitude","lat","longitude","lng"]
-
-        def findkey(dct):
-            try: data_lat.append(dct[key[0]])
-            except KeyError:
-                try: data_lat.append(dct[key[1]])
-                except KeyError:pass
-            return dct
-
-        def extractlng(dct):
-            try: data_lng.append(dct[key[2]])
-            except KeyError:
-                try: data_lng.append(dct[key[3]])
-                except KeyError:pass
-            return dct
-
-        try:
-            json.load(value, object_hook=findkey)
-        except:
-            return None
-        else:
-            #TODO: look for the timestamp value?
-            if data_lat:
-                json.load(value, object_hook=extractlng)
-                data = []
-                for x in range(0,len(data_lat)):
-                    data.append({"latitude": data_lat[x], "longitude":data_lng[x], "datetime":""})
-                if data:
-                    return data
-            return None

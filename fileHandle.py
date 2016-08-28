@@ -28,9 +28,10 @@ import exif
 from dbvalue.util import util
 from dbvalue.valueType import valueType
 from stanfordnlp.stanfordAPI import StanfordAPI
+from pil import Image
 
 import os
-from pil import Image
+import json
 
 from java.io import File
 from java.lang import Class
@@ -153,8 +154,9 @@ class FileHandler:
         try:
             with open(self.lclPath) as f:
                 for line in f:
+                    line = line.encode('utf-8', 'ignore')
                     if StanfordAPI.getLocations(line):
-                        return line
+                        return {"text":str(line)}
         except:
             pass
 
@@ -279,6 +281,53 @@ class FileHandler:
 
             return None
 
+    def processJsonFile(self):
+        """Checks whether value is a json file, if yes it looks for gps coordinates
 
+        Args:
+            value: the value that has to be checked.
 
+        Returns:
+            None: either the value is not a json or no values found.
+            list: a list that contains the data found using the following format
+                            {"latitude": value, "longitude":value, "datetime":value}
 
+        """
+        try:
+            value = open(self.lclPath())
+        except:
+            return None
+        else:
+            data_lat = []
+            data_lng = []
+
+            key = ["latitude","lat","longitude","lng"]
+
+            def findkey(dct):
+                try: data_lat.append(dct[key[0]])
+                except KeyError:
+                    try: data_lat.append(dct[key[1]])
+                    except KeyError:pass
+                return dct
+
+            def extractlng(dct):
+                try: data_lng.append(dct[key[2]])
+                except KeyError:
+                    try: data_lng.append(dct[key[3]])
+                    except KeyError:pass
+                return dct
+
+            try:
+                json.load(value, object_hook=findkey)
+            except:
+                return None
+            else:
+                #TODO: look for the timestamp value?
+                if data_lat:
+                    json.load(value, object_hook=extractlng)
+                    data = []
+                    for x in range(0,len(data_lat)):
+                        data.append({"latitude": data_lat[x], "longitude":data_lng[x], "datetime":""})
+                    if data:
+                        return data
+                return None

@@ -28,6 +28,8 @@ import urllib2
 class StanfordAPI:
     """APIs to interact with Staford npl local server"""
 
+    # java -mx5g -cp "./*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer
+
     @staticmethod
     def getLocations(value):
         """ Sends text to the parser and checks the response.
@@ -66,7 +68,7 @@ class StanfordAPI:
         if text:
             if text != "":
                 url = 'http://127.0.0.1:9000/?properties=%7B%22annotators%22:%20%22tokenize,ner%22,%20%22outputFormat%22:%20%22json%22%7D'
-
+                #annotators --> tokenize (sentence split up in many words in a smart way), ner (indentify the entity loc, name etc .. it requires tokenize)
                 try:
                     handler  = urllib2.Request( url=url, data=text);
                     handler = urllib2.urlopen(handler)

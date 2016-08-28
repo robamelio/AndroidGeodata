@@ -192,7 +192,7 @@ class AndroidGeodataCrawler(FileIngestModule):
             ext = "db"
 
         # Analysis only the files with 'db',
-        if ext in ("", "db", "pic", "json"):
+        if ext in ("", "db", "pic", "json", "txt", "log"):
             # Handles the file
             handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath(), file.getId(), self.stanpl )
 
@@ -210,11 +210,13 @@ class AndroidGeodataCrawler(FileIngestModule):
                 # If db
                 if ( ext == "db" or ext == "" ) and not (util.findValue( handler.getName(), self.dict, "dict_db")):
                     self.dbFound += 1
-                    self.log(Level.INFO, "db = "+handler.getName())
+
+                    if ext == "db":
+                        bool = False
+
 
                     # Tries a connection to verify whether the file is a db
                     if handler.connect():
-
                         bool = False
 
                         tables = handler.getTables()
@@ -280,27 +282,40 @@ class AndroidGeodataCrawler(FileIngestModule):
                 if (ext == "pic" or ext == "") and bool:
                     self.picFound += 1
 
+                    if ext == "pic":
+                        bool = False
+
                     res = handler.processPic()
                     if res:
+                        bool = False
                         res["name"] = handler.getName()
                         res["path"] = handler.getPath()
                         res["type"] = "pic"
                         data.append(res)
-                        bool = False
+
 
                 # The file is not a pic either, is it a file json?
                 if (ext == "json" or ext == "") and bool:
                     self.jsonFound += 1
 
-                    if bool:
-                        res = util.jsonFile(open(handler.getlclPath()))
-                        if res:
-                            for x in res:
-                                x["name"] = handler.getName()
-                                x["path"] = handler.getPath()
-                                x["type"] = "json"
+                    res = handler.processJsonFile()
+                    if res:
+                        bool = False
+                        for x in res:
+                            x["name"] = handler.getName()
+                            x["path"] = handler.getPath()
+                            x["type"] = "json"
 
-                            data += res
+                        data += res
+
+                if bool and self.stanpl:
+                    res = handler.processFile()
+                    if res:
+                        res["name"] = handler.getName()
+                        res["path"] = handler.getPath()
+                        res["type"] = "file"
+
+                        data.append(res)
 
                 # Deletes the file temporarily stored
                 e = handler.delete_file()
@@ -345,11 +360,16 @@ class AndroidGeodataCrawler(FileIngestModule):
                     art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_GPS_TRACKPOINT)
 
                     if "datetime" in item and item["datetime"] != "":
-                        att1 =  ( getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromPicDatetime(item["datetime"]) ) if el.tag == "pic" \
-                                      else getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromString(item["datetime"]) ) ) \
-                            if isinstance(item["datetime"],str) \
-                            else getBlackboardAtt("TSK_DATETIME",  timestamp.epochTOtimestamp(item["datetime"]))
-
+                        if isinstance(item["datetime"],str):
+                            if el.tag == "pic":
+                                att1 = getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromPicDatetime(item["datetime"]))
+                            else:
+                                att1 = getBlackboardAtt("TSK_DATETIME", timestamp.getTimestampFromString(item["datetime"]))
+                        else:
+                            if len(str(item["datetime"])) == 10:
+                                att1 = getBlackboardAtt("TSK_DATETIME",  item["datetime"])
+                            elif len(str(item["datetime"])) == 13:
+                                att1 = getBlackboardAtt("TSK_DATETIME",  int(item["datetime"]/1000))
                         art.addAttribute(att1)
 
                     att2 = getBlackboardAtt("TSK_GEO_LATITUDE", item["latitude"])
@@ -396,10 +416,10 @@ class AndroidGeodataCrawler(FileIngestModule):
 
                     art_text = file.newArtifact(blackboard.getOrAddArtifactType("geodataTEXT","Geodata in text").getTypeID())
                     att = getBlackboardAtt("TSK_TEXT", item["text"] )
+                    art_text.addAttribute(att)
                     if "column_text" and "table" in item:
                         att1 = getBlackboardAtt("TSK_DESCRIPTION", "table: "+item["table"]+", column = "+item["column_text"])
-
-                    art_text.addAttributes([att,att1])
+                        art_text.addAttribute(att1)
 
                     try:
                         # index the artifact for keyword search

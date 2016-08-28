@@ -31,14 +31,34 @@ class timestamp:
 
     @staticmethod
     def getTimestampFromString(value):
+        """ Converts from ISO 8601 to epoch timestamp.
+            ISO 8601 defines the international standard representation of dates and times.
 
-        d = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+        Args:
+            value: date and time in ISO 8601 format
 
-        return int(time.mktime(d.timetuple()))
+        Returns:
+            None: error during the conversion
+            Timestamp
+        """
+
+        try:
+            d = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+        except:
+            return None
+        else:
+            return int(time.mktime(d.timetuple()))
 
     @staticmethod
     def getTimestampFromPicDatetime(value):
+        """ Converts from DateTime extracted from a pic to epoch timestamp.
 
+        Args:
+            value: date and time from pic
+
+        Returns:
+            Timestamp
+        """
         date = value.split(" ")[0].split(":")
 
         time_var = value.split(" ")[1].split(":")
@@ -46,7 +66,3 @@ class timestamp:
         d = datetime.datetime(year=int(date[0]),month=int(date[1]),day=int(date[2]),hour=int(time_var[0]),minute=int(time_var[1]),second=int(time_var[2]))
 
         return int(time.mktime(d.timetuple()))
-
-    @staticmethod
-    def epochTOtimestamp(value):
-        return int(time.mktime(time.gmtime(value/1000.)))
