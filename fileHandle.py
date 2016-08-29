@@ -50,11 +50,17 @@ class FileHandler:
         stanpl: flag for stanford npl library
     """
 
-    def __init__(self, file, extension, name, path, id, stanpl=False):
+    def __init__(self, file, extension, name, path, id, stanpl = False):
         """Inits FileHandler"""
         self.file = file
         self.extension = extension
-        self.path = path
+
+        path = path.split("/")
+        self.path = "/"
+        for i in range(3,len(path)-1):
+            self.path = self.path + path[i] +"/"
+
+
         self.name = name
         self.id = id
         self.stanpl = stanpl
@@ -151,16 +157,27 @@ class FileHandler:
             String: line of the file where there is a location.
             None: no words found.
         """
-        try:
-            with open(self.lclPath) as f:
-                for line in f:
-                    line = line.encode('utf-8', 'ignore')
-                    if StanfordAPI.getLocations(line):
-                        return {"text":str(line)}
-        except:
-            pass
+        if self.stanpl:
+            try:
+                with open(self.lclPath) as f:
+                    for line in f:
+                        line = line.encode('utf-8', 'ignore')
+                        if StanfordAPI.getLocations(line):
+                            return {"text":str(line)}
+            except:
+                pass
+            # try:
+            #     with open(self.lclPath) as file_content:
+            #         text = file_content.encode('utf-8', 'ignore')
+            # except:
+            #     pass
+            # else:
+            #     if StanfordAPI.getLocations(text):
+            #         return {"text":"look at the file"}
 
         return None
+
+
 
     def connect(self):
         """ Connects to a databased if the file being processed is a db.
@@ -234,7 +251,7 @@ class FileHandler:
             self.stmt = None
             self.dbConn = None
 
-    def processDB(self, resultSet, column, nameColumn, dictionary):
+    def processDB(self, resultSet, column, nameColumn, dictionary, strdict = True):
         """ Processes a single value in a table of a database
 
         Args:
@@ -265,7 +282,7 @@ class FileHandler:
 
                 if util.isOneWord(value):
                     #Word
-                    return valueType.word(value,nameColumn, dictionary, self.stanpl)
+                    return valueType.word(value,nameColumn, dictionary, self.stanpl, strdict)
 
                 #Json
                 if value.startswith("{"):

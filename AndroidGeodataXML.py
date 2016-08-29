@@ -123,6 +123,14 @@ class AndroidGeodataXML(DataSourceIngestModule):
             return BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.fromLabel(label).getTypeID(),
                                        AndroidGeodataXMLFactory.moduleName, value )
 
+        def cleanString(s):
+            s = s.replace("\n","").replace("\t","")
+            while s.startswith(" "):
+                s = s[1:]
+            while s.endswith(" "):
+                s = s[:len(s)-1]
+            return s
+
         # we don't know how much work there is yet
         progressBar.switchToIndeterminate()
 
@@ -153,41 +161,42 @@ class AndroidGeodataXML(DataSourceIngestModule):
             data = []
             files = []
 
+            path = el.find("path")
+            if path is not None:
+                path = cleanString(path.text)
+
+            name = el.find("name")
+            if name is not None:
+                name = cleanString(name.text)
+
             # If the current element is pic
-            if el.tag == "pic":
-                path = el.find("path")
-                if path is not None:
-                    path = path.text.replace(" ","")
-                    files = fileManager.findFiles(dataSource, "%", path)
+            if el.tag == "pic" and path:
+                files = fileManager.findFiles(dataSource, "%", path)
 
             # If the current element is db
-            if el.tag == "db":
-                path = el.find("path")
-                if path is not None:
-                    path = path.text.replace(" ","")
-                    name = el.find("name")
-                    files = fileManager.findFiles(dataSource, "%", path) if name is None\
-                        else fileManager.findFiles(dataSource, name.text, path)
+            if el.tag == "db" and path:
+                files = fileManager.findFiles(dataSource, "%", path) if name is None\
+                    else fileManager.findFiles(dataSource, name, path)
+
+            # If the current element is either file or json
+            if el.tag in ("file","json") and path:
+                files = fileManager.findFiles(dataSource, name, path) if name is not None else []
 
             # If the current element is app
-            if el.tag == "app":
-                name = el.find("name")
-                if name is not None:
-                    try:
-                        f = getattr(appfun, name.text)
-                    except:
-                        self.log(Level.INFO, "Error to load the function "+name.text)
-                    else:
-
-                        filename = el.find("filename")
-                        path = el.find("path")
-                        if ( filename and path ) is not None:
-
-                            files = fileManager.findFiles(dataSource, filename.text, path.text)
-                            if files:
-                                data = f(files)
-                    finally:
-                        files = []
+            if el.tag == "app" and name and path:
+                try:
+                    f = getattr(appfun, name)
+                except:
+                    self.log(Level.INFO, "Error to load the function "+name)
+                else:
+                    filename = el.find("filename")
+                    if filename:
+                        filename = cleanString(filename.text)
+                        files = fileManager.findFiles(dataSource, filename, path)
+                        if files:
+                            data = f(files)
+                finally:
+                    files = []
 
             # Files contain all the files found and file would be each one of them per cycle
             for file in files:
@@ -203,6 +212,7 @@ class AndroidGeodataXML(DataSourceIngestModule):
                         if res:
                             res["name"] = handler.getName()
                             res["type"] = "pic"
+                            res["description"] = "from pic"
                             data.append({"file":file,"el":[res]})
 
                     if el.tag == "db":
@@ -247,21 +257,21 @@ class AndroidGeodataXML(DataSourceIngestModule):
                                             else:
 
                                                 if column.get("type") == "linked_datetime":
-                                                    res = handler.query(column.get("table"))
+                                                    res = handler.query(cleanString(column.get("table")))
                                                     while res.next():
                                                         try:
-                                                            value = res.getString(column.text)
+                                                            value = res.getString(cleanString(column.text))
                                                         except:
                                                             pass
                                                         else:
                                                             attributes["datetime"] = long(value)
-                                                            attributes["column_datetime"] = column.text
+                                                            attributes["column_datetime"] = cleanString(column.text)
                                                     nameColumn = None
                                                 else:
-                                                    nameColumn = column = column.text
+                                                    nameColumn = column = cleanString(column.text)
 
                                             if nameColumn:
-                                                temp = handler.processDB(resultSet, column, nameColumn, self.dict)
+                                                temp = handler.processDB(resultSet, column, nameColumn, self.dict, False)
                                                 if temp:
                                                     if temp[0] == "single":
                                                         attributes[temp[1]] = temp[2]
@@ -291,6 +301,25 @@ class AndroidGeodataXML(DataSourceIngestModule):
                             data.append(fileobj)
 
                             handler.close()
+
+                    if el.tag == "json":
+                        res = handler.processJsonFile()
+                        if res:
+                            for x in res:
+                                x["name"] = handler.getName()
+                                x["path"] = handler.getPath()
+                                x["type"] = "json"
+                                x["description"] = "from file json"
+                            data.append({"file":file,"el":res})
+
+                    if el.tag == "file":
+                        res = {}
+                        res["name"] = handler.getName()
+                        res["path"] = handler.getPath()
+                        res["type"] = "file"
+                        res["text"] = "look at the file"
+                        res["description"] = "from file"
+                        data.append({"file":file,"el":[res]})
 
                     if not handler.delete_file():
                         self.log(Level.INFO, "Error in deleting the file "+handler.getlclPath())
@@ -331,6 +360,9 @@ class AndroidGeodataXML(DataSourceIngestModule):
                             elif "table" in item:
                                 att5 = getBlackboardAtt("TSK_DESCRIPTION", "table: "+item["table"]+", column = "+item["column_latitude"]+", "+item["column_longitude"])
                                 art.addAttribute(att5)
+                            elif "description" in item:
+                                att5 = getBlackboardAtt("TSK_DESCRIPTION", item["description"])
+                                art.addAttribute(att5)
 
                             try:
                                 # index the artifact for keyword search
@@ -346,6 +378,9 @@ class AndroidGeodataXML(DataSourceIngestModule):
                             art_text.addAttribute(att)
                             if "column_text" and "table" in item:
                                 att1 = getBlackboardAtt("TSK_DESCRIPTION", "table: "+item["table"]+", column = "+item["column_text"])
+                                art_text.addAttribute(att1)
+                            elif "description" in item:
+                                att1 = getBlackboardAtt("TSK_DESCRIPTION", item["description"])
                                 art_text.addAttribute(att1)
 
                             try:

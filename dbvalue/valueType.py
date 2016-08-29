@@ -74,7 +74,7 @@ class valueType:
             return []
 
     @staticmethod
-    def word(value, nameColumn, dictionary, stanpl):
+    def word(value, nameColumn, dictionary, stanpl, strdict):
         """ Checks whether a word is likely to be a name related with locations
 
         Args:
@@ -90,10 +90,12 @@ class valueType:
         if stanpl:
             if StanfordAPI.getLocations(value):
                 return "single","text", value
-        else:
+        elif strdict:
             res = util.findValue(nameColumn, dictionary, "dict_str")
             if res:
                 return "single","text", value
+        else:
+            return "single","text", value
 
         return None
 

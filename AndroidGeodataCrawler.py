@@ -191,7 +191,7 @@ class AndroidGeodataCrawler(FileIngestModule):
         if ext in ("db","sqlite","sqlite3","db3"):
             ext = "db"
 
-        # Analysis only the files with 'db',
+        # Analyse only the files:
         if ext in ("", "db", "pic", "json", "txt", "log"):
             # Handles the file
             handler = FileHandler(file, file.getNameExtension(), file.getName(), file.getUniquePath(), file.getId(), self.stanpl )
@@ -208,15 +208,15 @@ class AndroidGeodataCrawler(FileIngestModule):
                 # # # # # # # # # # # # # # # # # # # # # # # # # # #  #
 
                 # If db
-                if ( ext == "db" or ext == "" ) and not (util.findValue( handler.getName(), self.dict, "dict_db")):
+                if ext in ("db",""):
+
                     self.dbFound += 1
 
                     if ext == "db":
                         bool = False
 
-
                     # Tries a connection to verify whether the file is a db
-                    if handler.connect():
+                    if handler.connect() and not (util.findValue( handler.getName(), self.dict, "dict_db")):
                         bool = False
 
                         tables = handler.getTables()
@@ -279,7 +279,7 @@ class AndroidGeodataCrawler(FileIngestModule):
                             handler.close()
 
                 # the file is not a db, is it a pic then?
-                if (ext == "pic" or ext == "") and bool:
+                if ext in ("pic", "") and bool:
                     self.picFound += 1
 
                     if ext == "pic":
@@ -291,12 +291,15 @@ class AndroidGeodataCrawler(FileIngestModule):
                         res["name"] = handler.getName()
                         res["path"] = handler.getPath()
                         res["type"] = "pic"
+                        res["description"] = "from pic"
                         data.append(res)
 
-
                 # The file is not a pic either, is it a file json?
-                if (ext == "json" or ext == "") and bool:
+                if ext in ("json","") and bool:
                     self.jsonFound += 1
+
+                    if ext == "json":
+                        bool = False
 
                     res = handler.processJsonFile()
                     if res:
@@ -305,6 +308,7 @@ class AndroidGeodataCrawler(FileIngestModule):
                             x["name"] = handler.getName()
                             x["path"] = handler.getPath()
                             x["type"] = "json"
+                            x["description"] = "from file json"
 
                         data += res
 
@@ -314,6 +318,7 @@ class AndroidGeodataCrawler(FileIngestModule):
                         res["name"] = handler.getName()
                         res["path"] = handler.getPath()
                         res["type"] = "file"
+                        res["description"] = "from file"
 
                         data.append(res)
 
@@ -386,6 +391,9 @@ class AndroidGeodataCrawler(FileIngestModule):
                     elif "table" in item:
                         att5 = getBlackboardAtt("TSK_DESCRIPTION", "table: "+item["table"]+", column = "+item["column_latitude"]+", "+item["column_longitude"])
                         art.addAttribute(att5)
+                    elif "description" in item:
+                        att5 = getBlackboardAtt("TSK_DESCRIPTION", item["description"])
+                        art.addAttribute(att5)
 
                     try:
                         # index the artifact for keyword search
@@ -420,6 +428,10 @@ class AndroidGeodataCrawler(FileIngestModule):
                     if "column_text" and "table" in item:
                         att1 = getBlackboardAtt("TSK_DESCRIPTION", "table: "+item["table"]+", column = "+item["column_text"])
                         art_text.addAttribute(att1)
+                    elif "description" in item:
+                        att1 = getBlackboardAtt("TSK_DESCRIPTION", item["description"])
+                        art_text.addAttribute(att1)
+
 
                     try:
                         # index the artifact for keyword search
