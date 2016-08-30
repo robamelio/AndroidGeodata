@@ -190,7 +190,7 @@ class AndroidGeodataXML(DataSourceIngestModule):
                     self.log(Level.INFO, "Error to load the function "+name)
                 else:
                     filename = el.find("filename")
-                    if filename:
+                    if filename is not None:
                         filename = cleanString(filename.text)
                         files = fileManager.findFiles(dataSource, filename, path)
                         if files:
