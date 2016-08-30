@@ -309,6 +309,9 @@ class FileHandler:
             list: a list that contains the data found using the following format
                             {"latitude": value, "longitude":value, "datetime":value}
 
+        Specializing JSON object decoding:
+            https://docs.python.org/2/library/json.html
+
         """
         try:
             value = open(self.lclPath())
