@@ -1,0 +1,752 @@
+<?xml version="1.0" ?>
+<androidgeodata>
+	<db>
+		<app>
+			/system/users/0/
+		</app>
+		<path>
+			/system/users/0/
+		</path>
+		<name>
+			accounts.db
+		</name>
+		<tables>
+			<table name="accounts">
+				<column type="text">
+					name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/net.slideshare.mobile/databases/
+		</app>
+		<path>
+			/data/net.slideshare.mobile/databases/
+		</path>
+		<name>
+			SlideShare.db
+		</name>
+		<tables>
+			<table name="slideshows">
+				<column type="text">
+					title
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.microsoft.office.outlook/databases/
+		</app>
+		<path>
+			/data/com.microsoft.office.outlook/databases/
+		</path>
+		<name>
+			acompli.db
+		</name>
+		<tables>
+			<table name="folders">
+				<column type="text">
+					folderPath
+				</column>
+			</table>
+			<table name="messages">
+				<column type="text">
+					subject
+				</column>
+			</table>
+			<table name="messages_search">
+				<column type="text">
+					subject
+				</column>
+			</table>
+			<table name="messages_search_content">
+				<column type="text">
+					c2subject
+				</column>
+			</table>
+			<table name="conversations">
+				<column type="text">
+					subject
+				</column>
+			</table>
+		</tables>
+	</db>
+	<file>
+		<app>
+			/data/com.microsoft.office.outlook/app_logs/
+		</app>
+		<path>
+			/data/com.microsoft.office.outlook/app_logs/
+		</path>
+		<name>
+			outlook.log
+		</name>
+	</file>
+	<db>
+		<app>
+			/data/com.google.android.gms/files/com.google.android.gms.vision/barcode/data/
+		</app>
+		<path>
+			/data/com.google.android.gms/files/com.google.android.gms.vision/barcode/data/
+		</path>
+		<name>
+			code_cache
+		</name>
+		<tables>
+			<table name="appstate">
+				<column type="text">
+					title
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.gms/databases/
+		</app>
+		<path>
+			/data/com.google.android.gms/databases/
+		</path>
+		<name>
+			pluscontacts.db
+		</name>
+		<tables>
+			<table name="people">
+				<column type="text">
+					tagline
+				</column>
+			</table>
+			<table name="postal_address">
+				<column type="text">
+					postal_address
+				</column>
+			</table>
+			<table name="ac_container">
+				<column type="text">
+					given_name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.gms/databases/
+		</app>
+		<path>
+			/data/com.google.android.gms/databases/
+		</path>
+		<name>
+			icing_contacts.db
+		</name>
+		<tables>
+			<table name="contacts">
+				<column type="text">
+					given_names
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.gms/databases/
+		</app>
+		<path>
+			/data/com.google.android.gms/databases/
+		</path>
+		<name>
+			config.db
+		</name>
+		<tables>
+			<table name="main">
+				<column type="text">
+					value
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.gm/databases/
+		</app>
+		<path>
+			/data/com.google.android.gm/databases/
+		</path>
+		<name>
+			mailstore.amelio.roberto@gmail.com.db
+		</name>
+		<tables>
+			<table name="messages">
+				<column type="text">
+					subject
+				</column>
+			</table>
+			<table name="conversations">
+				<column type="text">
+					subject
+				</column>
+			</table>
+			<table name="ads">
+				<column type="text">
+					advertiser_name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.dialer/databases/
+		</app>
+		<path>
+			/data/com.google.android.dialer/databases/
+		</path>
+		<name>
+			dialer.db
+		</name>
+		<tables>
+			<table name="smartdial_table">
+				<column type="text">
+					display_name
+				</column>
+			</table>
+			<table name="cached_number_contacts">
+				<column type="json">
+					lookup_key
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.calendar/databases/
+		</app>
+		<path>
+			/data/com.google.android.calendar/databases/
+		</path>
+		<name>
+			timelydata.db
+		</name>
+		<tables>
+			<table name="timelydata">
+				<column type="json">
+					structuredLocation
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.translate/databases/
+		</app>
+		<path>
+			/data/com.google.android.apps.translate/databases/
+		</path>
+		<name>
+			historydb_sql
+		</name>
+		<tables>
+			<table name="entries">
+				<column type="text">
+					translation
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.plus/databases/
+		</app>
+		<path>
+			/data/com.google.android.apps.plus/databases/
+		</path>
+		<name>
+			es0.db
+		</name>
+		<tables>
+			<table name="cxns">
+				<column type="text">
+					cxn_name
+				</column>
+			</table>
+			<table name="squares">
+				<column type="text">
+					tagline
+				</column>
+			</table>
+			<table name="contacts">
+				<column type="text">
+					name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<pic>
+		<app>
+			/data/com.google.android.apps.photos/files/shadowcopies/
+		</app>
+		<path>
+			/data/com.google.android.apps.photos/files/shadowcopies/
+		</path>
+		<name>
+			original_0270195f-4a64-4dd7-9db2-f233f950a555_IMG_20160806_135159.jpg
+		</name>
+	</pic>
+	<db>
+		<app>
+			/data/com.google.android.apps.genie.geniewidget/databases/
+		</app>
+		<path>
+			/data/com.google.android.apps.genie.geniewidget/databases/
+		</path>
+		<name>
+			newsweather.db
+		</name>
+		<tables>
+			<table name="lu_edition">
+				<column type="text">
+					name
+				</column>
+			</table>
+			<table name="section">
+				<column type="text">
+					name
+				</column>
+			</table>
+			<table name="notification">
+				<column type="text">
+					story_title
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.docs.editors.slides/files/appmetadata/78f9ba3bda098909289487e40e709a69/
+		</app>
+		<path>
+			/data/com.google.android.apps.docs.editors.slides/files/appmetadata/78f9ba3bda098909289487e40e709a69/
+		</path>
+		<name>
+			DB
+		</name>
+		<tables>
+			<table name="fontMetadataStore_CORE">
+				<column type="text">
+					fontFamily
+				</column>
+			</table>
+			<table name="fontMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+			<table name="templateMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.docs.editors.slides/files/appmetadata/3c59cf11be61e5b7bcce4f257cec385c/
+		</app>
+		<path>
+			/data/com.google.android.apps.docs.editors.slides/files/appmetadata/3c59cf11be61e5b7bcce4f257cec385c/
+		</path>
+		<name>
+			DB
+		</name>
+		<tables>
+			<table name="fontMetadataStore_CORE">
+				<column type="text">
+					fontFamily
+				</column>
+			</table>
+			<table name="fontMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+			<table name="templateMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.docs.editors.sheets/files/appmetadata/f1b27f2da5b8d26995c5d7ab26b8b31a/
+		</app>
+		<path>
+			/data/com.google.android.apps.docs.editors.sheets/files/appmetadata/f1b27f2da5b8d26995c5d7ab26b8b31a/
+		</path>
+		<name>
+			DB
+		</name>
+		<tables>
+			<table name="fontMetadataStore_CORE">
+				<column type="text">
+					fontFamily
+				</column>
+			</table>
+			<table name="fontMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.docs.editors.sheets/files/appmetadata/d02cacb2b4d11955119b610ed8766f67/
+		</app>
+		<path>
+			/data/com.google.android.apps.docs.editors.sheets/files/appmetadata/d02cacb2b4d11955119b610ed8766f67/
+		</path>
+		<name>
+			DB
+		</name>
+		<tables>
+			<table name="fontMetadataStore_CORE">
+				<column type="text">
+					fontFamily
+				</column>
+			</table>
+			<table name="fontMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.docs.editors.docs/files/appmetadata/da19a59835463de87b979ad46fb04509/
+		</app>
+		<path>
+			/data/com.google.android.apps.docs.editors.docs/files/appmetadata/da19a59835463de87b979ad46fb04509/
+		</path>
+		<name>
+			DB
+		</name>
+		<tables>
+			<table name="fontMetadataStore_CORE">
+				<column type="text">
+					fontFamily
+				</column>
+			</table>
+			<table name="fontMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.docs.editors.docs/files/appmetadata/783a72fed61823e41ca8f400c69eb90f/
+		</app>
+		<path>
+			/data/com.google.android.apps.docs.editors.docs/files/appmetadata/783a72fed61823e41ca8f400c69eb90f/
+		</path>
+		<name>
+			DB
+		</name>
+		<tables>
+			<table name="fontMetadataStore_CORE">
+				<column type="text">
+					fontFamily
+				</column>
+			</table>
+			<table name="fontMetadataStore_PROPERTIES">
+				<column type="text">
+					propValue
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.google.android.apps.books/databases/
+		</app>
+		<path>
+			/data/com.google.android.apps.books/databases/
+		</path>
+		<name>
+			books.db
+		</name>
+		<tables>
+			<table name="volumes">
+				<column type="text">
+					title
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.facebook.orca/databases/
+		</app>
+		<path>
+			/data/com.facebook.orca/databases/
+		</path>
+		<name>
+			threads_db2
+		</name>
+		<tables>
+			<table name="threads">
+				<column type="text">
+					snippet
+				</column>
+			</table>
+			<table name="messages">
+				<column type="text">
+					text
+				</column>
+			</table>
+			<table name="thread_users">
+				<column type="text">
+					first_name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.facebook.katana/databases/
+		</app>
+		<path>
+			/data/com.facebook.katana/databases/
+		</path>
+		<name>
+			search_bootstrap_db
+		</name>
+		<tables>
+			<table name="entities">
+				<column type="text">
+					subtext
+				</column>
+			</table>
+			<table name="entities_phonetic_data">
+				<column type="text">
+					indexed_data
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.facebook.katana/databases/
+		</app>
+		<path>
+			/data/com.facebook.katana/databases/
+		</path>
+		<name>
+			bookmarks_db2
+		</name>
+		<tables>
+			<table name="bookmarks">
+				<column type="text">
+					bookmark_name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.cleanmaster.mguard/files/
+		</app>
+		<path>
+			/data/com.cleanmaster.mguard/files/
+		</path>
+		<name>
+			process_tips2.db
+		</name>
+		<tables>
+			<table name="string_content">
+				<column type="text">
+					content
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.cleanmaster.mguard/files/
+		</app>
+		<path>
+			/data/com.cleanmaster.mguard/files/
+		</path>
+		<name>
+			pkgquery_hf_en_5.11.6.db
+		</name>
+		<tables>
+			<table name="langqueryname">
+				<column type="text">
+					name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.cleanmaster.mguard/files/
+		</app>
+		<path>
+			/data/com.cleanmaster.mguard/files/
+		</path>
+		<name>
+			pkgcache_hf_en_5.12.3.db
+		</name>
+		<tables>
+			<table name="langqueryname">
+				<column type="text">
+					name
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.cleanmaster.mguard/files/
+		</app>
+		<path>
+			/data/com.cleanmaster.mguard/files/
+		</path>
+		<name>
+			clearpath_other_5.9.6.db
+		</name>
+		<tables>
+			<table name="systemapps">
+				<column type="text">
+					desc
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.cleanmaster.mguard/databases/
+		</app>
+		<path>
+			/data/com.cleanmaster.mguard/databases/
+		</path>
+		<name>
+			onews.db
+		</name>
+		<tables>
+			<table name="tbl_onews__00000402">
+				<column type="text">
+					keywords
+				</column>
+			</table>
+			<table name="tbl_onews__00000202">
+				<column type="text">
+					keywords
+				</column>
+			</table>
+			<table name="tbl_onews__00000101">
+				<column type="text">
+					keywords
+				</column>
+			</table>
+			<table name="tbl_onews__00000b01">
+				<column type="text">
+					keywords
+				</column>
+			</table>
+			<table name="tbl_onews__001c0b01">
+				<column type="text">
+					title
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.cleanmaster.mguard/databases/
+		</app>
+		<path>
+			/data/com.cleanmaster.mguard/databases/
+		</path>
+		<name>
+			mobvista.msdk.db
+		</name>
+		<tables>
+			<table name="campaign">
+				<column type="text">
+					app_desc
+				</column>
+			</table>
+		</tables>
+	</db>
+</androidgeodata>
+ 
+ <!-- Report of possible other coordinates --> 
+ <!--<?xml version="1.0" ?>
+<report>
+	<db>
+		<app>
+			/data/com.facebook.orca/databases/
+		</app>
+		<path>
+			/data/com.facebook.orca/databases/
+		</path>
+		<name>
+			threads_db2
+		</name>
+		<tables>
+			<table name="threads">
+				<column type="">
+					group_chat_rank
+				</column>
+			</table>
+			<table name="thread_users">
+				<column type="">
+					user_rank
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.facebook.orca/databases/
+		</app>
+		<path>
+			/data/com.facebook.orca/databases/
+		</path>
+		<name>
+			composer_shortcuts_db
+		</name>
+		<tables>
+			<table name="composer_shortcuts">
+				<column type="">
+					ranking_weight
+				</column>
+			</table>
+		</tables>
+	</db>
+	<db>
+		<app>
+			/data/com.facebook.katana/databases/
+		</app>
+		<path>
+			/data/com.facebook.katana/databases/
+		</path>
+		<name>
+			search_bootstrap_db
+		</name>
+		<tables>
+			<table name="entities">
+				<column type="">
+					cost
+				</column>
+			</table>
+		</tables>
+	</db>
+</report>
+-->
