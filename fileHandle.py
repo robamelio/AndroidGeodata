@@ -7,7 +7,9 @@ the Autopsy file given as input.
 
 This file is part of AndroidGeodata.
 
-Copyright © 2016 Roberto Amelio
+Copyright (C) 2016 Roberto Amelio
+
+This file is part of AndroidGeodata.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
