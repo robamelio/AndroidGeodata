@@ -140,7 +140,21 @@ On the contrary, _dict_db_ is used for a completely different scope. It is neede
 
 # Installation
 
+In order to add the modules on Autopsy, it is only required to copy a directory containing the files' project into the directory retrievable from Tools --> Python Plugin,
+
+[Stanford CoreNLP](http://stanfordnlp.github.io/CoreNLP/) is a library used in this work to verify whether a word or a text is related to locations. It requires running a local server to which the software sends the value to be analysed. The command used to run the local server is: 
+
+    java -mx5g -cp "./*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer
+
+The Android Geodata Crawler expects that the server is running on 127.0.0.1:9000. To specify whether the module has to use the library, there is a flag named _Stanford coreNPL_ to set before running the File Ingest Module.
+
 # Usage
+
+In order to modify the XML file and JSON dictionary, it is possible to edit the provided ones or create new ones. The important thing is that they have to be in the main directory.
+
+The results are shown in the results view area and it is possible to select a single artifact, read information about it, extract it, etc. The results can be plotted on Google Earth going on _Generate Report_ and selecting  _Google Earth/KML_.
+
+The idea of having created two different modules is to use them in a way that the _Android Geodata Crawler_ looks for geodata generating reports. After the analysis of the results and the reports, the latter can be improved and given as input to the _Android geodata XML_ in order to better keep only valid information and plot it on Google Earth. Another scope of the XML module is to scan a data source using XML reports shared by the community. 
 
 # License
 
