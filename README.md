@@ -25,72 +25,72 @@ The modules look for GPS coordinates or words related to locations, which are sh
 
 An XML file is used to describe files containing geodata. Below it is shown a simple version of a valid XML file, which contains an example for every element supported so far. 
 
-<androidgeodata>
-    <pic>
-        <app version="1.0">Camera</app>
-        <path>/media/0/DCIM/Camera/</path>
-    </pic>
-    <db>
-        <app>Chrome</app>
-        <path>/data/com.android.chrome/app_chrome/Default/</path>
-        <name>History</name>
-        <tables>
-            <table name="urls">
-                <column type="text">url</column>
-            </table>
-        </tables>
-    </db>
-    <db>
-        <app version="">twitter</app>
-        <path>/data/com.twitter.android/databases</path>
-        <name>%-46.db</name>
-        <tables>
-            <table name="search_queries">
-                <column type="longitude">longitude</column>
-                <column type="latitude">latitude</column>
-                <column type="datetime">time</column>
-            </table>
-            
-            <table name="statuses">
-                <column type="latitude">latitude</column>
-                <column type="longitude">longitude</column>
-            </table>
-        </tables>
-    </db>
-    <db>
-        <app>Foursquared</app>
-        <path>/data/com.joelapenna.foursquared/databases/</path>
-        <name>fsq.db</name>
-        <tables>
-            <table name="venues">
-                <column type="latitude">loc_lat</column>
-                <column type="longitude">loc_long</column>
-                <column type="linked_datetime" 
-                	table="recently_viewed_venue">last_viewed</column>
-            </table>
-        </tables>
-    </db>
-    <db>
-        <app version="1.0">Facebook</app>
-        <path>/data/com.facebook.katana/databases/</path>
-        <name>places.db</name>
-        <tables>
-            <table name="places_model">
-                <column type="json">content</column>
-            </table>
-        </tables>
-    </db>
-   <file>
-        <app>Outlook</app>
-        <path>/data/com.microsoft.office.outlook/app_logs/</path>
-        <name>network.log</name>
-    </file>
-    <app>
-        <name>googlemaps</name>
-        <path>/data/com.google.android.apps.maps/cache/http</path>
-        <filename>%.0</filename>
-    </app>
-</androidgeodata>
+    <androidgeodata>
+        <pic>
+            <app version="1.0">Camera</app>
+            <path>/media/0/DCIM/Camera/</path>
+            </pic>
+            <db>
+                <app>Chrome</app>
+                <path>/data/com.android.chrome/app_chrome/Default/</path>
+                <name>History</name>
+                <tables>
+                    <table name="urls">
+                        <column type="text">url</column>
+                    </table>
+                </tables>
+            </db>
+            <db>
+                <app version="">twitter</app>
+                <path>/data/com.twitter.android/databases</path>
+                <name>%-46.db</name>
+                <tables>
+                    <table name="search_queries">
+                        <column type="longitude">longitude</column>
+                        <column type="latitude">latitude</column>
+                        <column type="datetime">time</column>
+                    </table>
+
+                    <table name="statuses">
+                        <column type="latitude">latitude</column>
+                        <column type="longitude">longitude</column>
+                    </table>
+                </tables>
+            </db>
+            <db>
+                <app>Foursquared</app>
+                <path>/data/com.joelapenna.foursquared/databases/</path>
+                <name>fsq.db</name>
+                <tables>
+                    <table name="venues">
+                        <column type="latitude">loc_lat</column>
+                        <column type="longitude">loc_long</column>
+                        <column type="linked_datetime" 
+                            table="recently_viewed_venue">last_viewed</column>
+                    </table>
+                </tables>
+            </db>
+            <db>
+                <app version="1.0">Facebook</app>
+                <path>/data/com.facebook.katana/databases/</path>
+                <name>places.db</name>
+                <tables>
+                    <table name="places_model">
+                        <column type="json">content</column>
+                    </table>
+                </tables>
+            </db>
+           <file>
+                <app>Outlook</app>
+                <path>/data/com.microsoft.office.outlook/app_logs/</path>
+                <name>network.log</name>
+            </file>
+            <app>
+                <name>googlemaps</name>
+                <path>/data/com.google.android.apps.maps/cache/http</path>
+                <filename>%.0</filename>
+            </app>
+        </androidgeodata>
 
 
 
