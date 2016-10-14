@@ -7,8 +7,14 @@ The modules aim to collect and display significant amounts of data through which
 # Table of contents
 
 * [Description](README.md#Description)
-* Installation
-* Usage
-* License
+* [Installation](README.md#Installation)
+* [Usage](README.md#Usage)
+* [License](README.md#License)
 
 # Description
+
+# Installation
+
+# Usage
+
+# License
