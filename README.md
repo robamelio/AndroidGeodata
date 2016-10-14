@@ -106,6 +106,38 @@ Finally, the element _app_ is used to declare customised functions to examine sp
 
 # Dictionary
 
+The dictionary is a JSON file composed of four elements: dict_num, dict_datatime, dict_str, dict_db. They represent dictionaries used for different purposes by the software with which a user can interact. An example of a simple dictionary can be found below:
+
+    { 
+        "dict_num": 
+        {
+            "latitude":["latitude","lat","gps_latitude","latitude_e6",
+                        "la","location_latitude","loc_lat"],
+            "longitude": ["longitude","lng","gps_longitude","logitude_e6",
+                          "lo","location_longitude","loc_long","lon"]
+        },
+        "dict_datetime":
+        {
+                "datetime":["timestamp","last_active","datetaken",
+                            "capture_timestamp","recordedDate","endDate"]
+        },
+        "dict_str":
+        {
+            "text":["place","address","city","country"]
+        },
+        "dict_db":
+        {
+            "db":["worldcity.db","Ted.db"]
+        }
+    }
+
+
+_dict_num_ contains two elements, _latitude_ and _longitude_, which are lists representing names of columns containing geodata. As their names indicate they provide latitude or longitude information respectively. Therefore, when the software finds a possible coordinate value inside a database, it checks whether the name of the column is contained in one of the two lists making sure that the value is either a latitude or a longitude value.
+
+_dict_datetime_ and _dict_str_ have the same purpose of _dict_num_, however, they are used to find datetime information or text related to locations.
+
+On the contrary, _dict_db_ is used for a completely different scope. It is needed to specify to the software which databases it has to skip. Therefore, it contains a list of databases' names.
+
 # Installation
 
 # Usage
