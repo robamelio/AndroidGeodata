@@ -1,4 +1,4 @@
-# AndroidGeodata
+# Android Geodata
 
 This project contains two Python modules for Autopsy, a digital forensics platform.
 
