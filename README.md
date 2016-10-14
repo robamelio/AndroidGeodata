@@ -25,7 +25,6 @@ The modules look for GPS coordinates or words related to locations, which are sh
 
 An XML file is used to describe files containing geodata. Below it is shown a simple version of a valid XML file, which contains an example for every element supported so far. 
 
-`
 <androidgeodata>
     <pic>
         <app version="1.0">Camera</app>
@@ -93,7 +92,6 @@ An XML file is used to describe files containing geodata. Below it is shown a si
     </app>
 </androidgeodata>
 
-`
 
 
 Firstly, the root element in the XML has to be _androidgeodata_ and, in general, in every element there is the subelement _app_ which is not compulsory as the software does not parse it, it is only needed to add information about the application.
