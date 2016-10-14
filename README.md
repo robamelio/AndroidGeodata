@@ -18,3 +18,6 @@ The modules aim to collect and display significant amounts of data through which
 # Usage
 
 # License
+
+This project is under the MIT License.
+See the file [LICENSE](LICENSE)
